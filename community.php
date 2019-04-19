@@ -7,7 +7,7 @@
   // 外部ファイルから処理の読み込み
   // 外部ファイルでエラーが出ると、処理を中断する
   	require('dbconnect.php');
-    $sql = 'SELECT * FROM `posts` ORDER BY post_id DESC';
+    $sql = 'SELECT * FROM `questions` ORDER BY id DESC';
     
 
     //SQL実行
@@ -16,11 +16,11 @@
 
     //データ取得
   	while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    	$posts[] = array(
-        "post_id"=>$record['post_id'],
+    	$questions[] = array(
+        "id"=>$record['id'],
+        "name"=>$record['name'],
         "title"=>$record['title'],
-        "content"=>$record['content'],
-        "picture_path"=>$record['picture_path'],
+        "question"=>$record['question'],
         "created"=>$record['created']      );
 
   }
@@ -100,9 +100,9 @@
 			<nav id="fh5co-main-menu" role="navigation">
 				<ul>
 					<li><a href="index.php">Home</a></li>
-					<li class="fh5co-active"><a href="blog.php">Blog</a></li>
+					<li><a href="blog.php">Blog</a></li>
 					<li><a href="portfolio.html">Application</a></li>
-					<li><a href="community.php">Community</a></li>
+					<li class="fh5co-active"><a href="community.php">Community</a></li>
 					<li><a href="about.html">About</a></li>
 					<li><a href="contact/contact.php">Contact</a></li>
 				</ul>
@@ -123,70 +123,23 @@
 		<div id="fh5co-main">
 			<div class="fh5co-narrow-content">
 				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Read My Blog</h2>
+				<a type="submit" class="btn btn-primary btn-md" href="question/send.php">質問する</a><br>
 				<div class="row row-bottom-padded-md">
-				<?php foreach ($posts as $post) { ?>
+				<?php foreach ($questions as $question) { ?>
 					<div class="col-md-3 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-          <a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><img src="member_picture/<?php echo $post['picture_path']; ?>" width="200" height="200"></a>
+          <a href="view.php?id=<?php echo $question['id']; ?>" class="lead"><img src="images/kinniku_hanasu.png" width="200" height="200"></a>
 					</div>
 					<div class="col-md-9 col-padding animate-box" data-animate-effect="fadeInLeft">
 							<div class="desc">
-							<h3><a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><?php echo $post['title'] ?></a></h3>
-								<span><b><i class="icon-comment"></i><?php echo $post['created'] ?></b></span></br>
-								<a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><h4><?php echo mb_substr(strip_tags($post['content']),0,50).'...'; ?></h4></a>
-								 <a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead">Read More <i class="icon-arrow-right3"></i></a><hr style="border:0;border-top:1px solid;">
+							<h3><a href="view.php?id=<?php echo $question['id']; ?>" class="lead"><?php echo $question['title'] ?></a></h3>
+								<span><b><i class="icon-comment"></i><?php echo $question['name'] ?></b></span><span>   /   </span>
+								<span><b><i class="icon-comment"></i><?php echo $question['created'] ?></b></span></br>
+								<a href="view.php?id=<?php echo $question['id']; ?>" class="lead"><h4><?php echo mb_substr(strip_tags($question['question']),0,50).'...'; ?></h4></a>
+								<a href="view.php?id=<?php echo $question['id']; ?>" class="lead">Read More<i class="icon-arrow-right3"></i></a><hr style="border:0;border-top:1px solid;">
 							</div>
 						</div>
     			<?php } ?>
 				</div>
-<!-- 		<div id="fh5co-main">
-			<div class="fh5co-narrow-content">
-				<h2 class="fh5co-heading animate-box" data-animate-effect="fadeInLeft">Read My Blog</h2>
-				<div class="row row-bottom-padded-md">
-					<div class="col-md-6 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-						<div class="blog-entry">
-							<a href="article_tem.php" class="blog-img"><img src="images/myass.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by FreeHTML5.co"></a>
-							<div class="desc">
-								<h3><a href="article_tem.php">自己紹介</a></h3>
-								<span><small> <i class="icon-comment"></i> 2018 / 10 / 29 </small></span>
-								<p>初めまして、今日からブログを書いていきます。簡単に自己紹介を...</p>
-								<a href="article_tem.php" class="lead">続きを読む <i class="icon-arrow-right3"></i></a>
-							</div>
-						</div>
-					</div> -->
-<!-- 				<div class="col-md-6 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-						<div class="blog-entry">
-							<a href="#" class="blog-img"><img src="images/img-6.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by FreeHTML5.co"></a>
-							<div class="desc">
-								<h3><a href="#">Inspirational Website</a></h3>
-								<span><small>by Admin </small> / <small> Web Design </small> / <small> <i class="icon-comment"></i> 14</small></span>
-								<p>Design must be functional and functionality must be translated into visual aesthetics</p>
-								<a href="#" class="lead">Read More <i class="icon-arrow-right3"></i></a>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-						<div class="blog-entry">
-							<a href="#" class="blog-img"><img src="images/img-3.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by FreeHTML5.co"></a>
-							<div class="desc">
-								<h3><a href="#">Inspirational Website</a></h3>
-								<span><small>by Admin </small> / <small> Web Design </small> / <small> <i class="icon-comment"></i> 14</small></span>
-								<p>Design must be functional and functionality must be translated into visual aesthetics</p>
-								<a href="#" class="lead">Read More <i class="icon-arrow-right3"></i></a>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-						<div class="blog-entry">
-							<a href="#" class="blog-img"><img src="images/img-4.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by FreeHTML5.co"></a>
-							<div class="desc">
-								<h3><a href="#">Inspirational Website</a></h3>
-								<span><small>by Admin </small> / <small> Web Design </small> / <small> <i class="icon-comment"></i> 14</small></span>
-								<p>Design must be functional and functionality must be translated into visual aesthetics</p>
-								<a href="#" class="lead">Read More <i class="icon-arrow-right3"></i></a>
-							</div>
-						</div>
-					</div>
- -->
 				</div>
 
 		</div>

@@ -7,7 +7,7 @@
   // 外部ファイルから処理の読み込み
   // 外部ファイルでエラーが出ると、処理を中断する
   	require('dbconnect.php');
-    $sql = 'SELECT * FROM `post` ORDER BY no DESC';
+    $sql = 'SELECT * FROM `posts` ORDER BY post_id DESC';
     
 
     //SQL実行
@@ -17,11 +17,11 @@
     //データ取得
   	while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
     	$posts[] = array(
-        "no"=>$record['no'],
+        "post_id"=>$record['post_id'],
         "title"=>$record['title'],
+        "content"=>$record['content'],
         "picture_path"=>$record['picture_path'],
-        "time"=>$record['time'],
-        "content"=>$record['content']
+        "created"=>$record['created']
       );
 
   }
@@ -102,6 +102,7 @@
 					<li class="fh5co-active"><a href="index.php">Home</a></li>
 					<li><a href="blog.php">Blog</a></li>
 					<li><a href="portfolio.html">Application</a></li>
+					<li><a href="community.php">Community</a></li>
 					<li><a href="about.html">About</a></li>
 					<li><a href="contact/contact.php">Contact</a></li>
 				</ul>
@@ -129,7 +130,7 @@
 				   			<div class="row">
 					   			<div class="col-md-8 col-md-offset-2 text-center js-fullheight slider-text">
 					   				<div class="slider-text-inner">
-					   					<h1>Welcome to Muscle Kingdom</h1>
+					   					<h1><font face="fantasy">Welcome to Muscle Kingdom</font></h1>
 					   				</div>
 					   			</div>
 					   		</div>
@@ -141,8 +142,8 @@
 				   			<div class="row">
 					   			<div class="col-md-8 col-md-offset-2 text-center js-fullheight slider-text">
 					   				<div class="slider-text-inner">
-					   					<h1>フィットネスに関する情報とアプリを提供しています。</h1>
-											<p><a class="btn btn-primary btn-demo popup-vimeo" href="https://vimeo.com/channels/staffpicks/93951774"> <i class="icon-monitor"></i> Live Preview</a> <a class="btn btn-primary btn-learn">Learn More<i class="icon-arrow-right3"></i></a></p>
+					   					<h1><font face="fantasy">We provide basic knowledge and application about fitness.</font></h1>
+											<p><a class="btn btn-primary btn-demo popup-vimeo" href="blog.php"><i class="icon-arrow-left3"></i><font face="fantasy">Blog</font></a> <a class="btn btn-primary btn-learn" href="portfolio.html"><font face="fantasy">App</font><i class="icon-arrow-right3"></i></a></p>
 					   				</div>
 					   			</div>
 					   		</div>
@@ -154,9 +155,8 @@
 				   			<div class="row">
 					   			<div class="col-md-8 col-md-offset-2 text-center js-fullheight slider-text">
 					   				<div class="slider-text-inner">
-					   					<h1>考え中</h1>
-											<h2>Free html5 templates Made by <a href="http://freehtml5.co/" target="_blank">freehtml5.co</a></h2>
-											<p><a class="btn btn-primary btn-demo popup-vimeo" href="https://vimeo.com/channels/staffpicks/93951774"> <i class="icon-monitor"></i> Live Preview</a> <a class="btn btn-primary btn-learn">Learn More<i class="icon-arrow-right3"></i></a></p>
+					   					<h1><font face="fantasy">Ask us anything you'd like to know!</font></h1>
+											<p><a class="btn btn-primary btn-demo popup-vimeo" href="community.php"><i class="icon-arrow-left3"></i><font face="fantasy">COMMUNITY</font></a> <a class="btn btn-primary btn-learn" href="contact/contact.php"><font face="fantasy">CONTACT</font><i class="icon-arrow-right3"></i></a></p>
 					   				</div>
 					   			</div>
 					   		</div>
@@ -202,7 +202,6 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			<div class="fh5co-narrow-content">
@@ -210,14 +209,14 @@
 				<div class="row row-bottom-padded-md">
 				<?php foreach ($posts as $post) { ?>
 					<div class="col-md-3 col-sm-6 col-padding animate-box" data-animate-effect="fadeInLeft">
-          <img src="member_picture/<?php echo $post['picture_path']; ?>" width="150" height="150">
+          <a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><img src="member_picture/<?php echo $post['picture_path']; ?>" width="200" height="200"></a>
 					</div>
 					<div class="col-md-9 col-padding animate-box" data-animate-effect="fadeInLeft">
 							<div class="desc">
-							<h3><?php echo $post['title'] ?></h3>
-								<span><b> <i class="icon-comment"></i><?php echo $post['time'] ?></b></span></br>
-								<h4><?php echo mb_substr(strip_tags($post['content']),0,50).'...'; ?></h4>
-								 <a href="show.php?no=<?php echo $post['no']; ?>" class="lead">Read More <i class="icon-arrow-right3"></i></a><hr style="border:0;border-top:1px solid;">
+							<h3><a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><?php echo $post['title'] ?></a></h3>
+								<span><b><i class="icon-comment"></i><?php echo $post['created'] ?></b></span></br>
+								<a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead"><h4><?php echo mb_substr(strip_tags($post['content']),0,50).'...'; ?></h4></a>
+								 <a href="show.php?post_id=<?php echo $post['post_id']; ?>" class="lead">Read More <i class="icon-arrow-right3"></i></a><hr style="border:0;border-top:1px solid;">
 							</div>
 						</div>
     			<?php } ?>
@@ -232,8 +231,8 @@
 					</div>
 					<div class="row">
 						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-							<p class="fh5co-lead">Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-							<p><a href="#" class="btn btn-primary">Learn More</a></p>
+						<p class="fh5co-lead">フィットネスに関するご質問を受け付けております。<br>栄養やトレーニング方法に関するご質問がございましたら、<br>下のボタンからお気軽にお問い合わせください。</p>
+						<p><a href="contact/contact.php" class="btn btn-primary">CONTACT</a></p>
 						</div>
 						
 					</div>
