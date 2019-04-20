@@ -74,6 +74,7 @@ if (!empty($_POST)) {
     // SQL文実行
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
+    $answers = [];
     while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $answers[] = array(
         "answer_id"=>$record['answer_id'],
@@ -188,7 +189,7 @@ if (!empty($_POST)) {
             <?php } ?>
         <hr style="border:0;border-top:5px solid;"><br>
             <h2 class="fh5co-heading">ANSWER</h2>
-            <?php foreach ($answers as $answer_each) { ?>
+            <?php foreach ((array)$answers as $answer_each) { ?>
             <span><b><?php echo $answer_each["name"]; ?></b></span>   /   
             <span><b><?php echo $answer_each["created"]; ?></b></span><br><br>
             <b><p class="content"><?php echo $answer_each["answer"]; ?></p></b><hr style="border:0;border-top:1px solid;">
